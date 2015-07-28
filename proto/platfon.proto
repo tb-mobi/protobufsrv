@@ -1,0 +1,644 @@
+package platfon;
+
+option java_package = "ru.myplatfon.protogw";
+option java_outer_classname = "PlatfonProtos";
+
+message PlatfonPacketProto {
+	enum RequestId {
+		Registration			= 0;
+		Login					= 1;
+		ListPaymentTools		= 2;
+		AddCard					= 3;
+		BlockRandomSum			= 4;
+		VerifySum				= 5;
+		Pay						= 6;
+		RestorePass				= 7;
+		GetHistory				= 8;
+		PayCellular				= 9;
+		SendMail				= 10;
+		Fee						= 11;
+		GIBDD_BILLS				= 12;
+		FEE_BY_CLIENT			= 13;
+		CellularFee				= 14;
+		FAVORITE_LIST			= 15;
+		TRANSACTION_STATE		= 16;
+		CATEGORY_LIST			= 18;
+		MERCHANT_LIST			= 19;
+		CELL_OPERATOR			= 20;
+		DELETE_CARD				= 21;
+		PAY_BY_INITIAL_ID		= 22;
+		ADD_FAVORITE_PAY		= 23;
+		CHECK					= 24;
+		GET_MERCHANT			= 25;
+		RENAME_FAVORITE_PAY		= 26;
+		DELETE_FAVORITE_PAY		= 27;
+	}
+
+	required int32 id = 1;
+	optional bytes data = 2;
+}
+
+message ErrorProto {
+	required int32 code = 1;
+	optional string usermessage = 2;
+}
+
+message PaymentToolProto {
+	enum Type {
+		Wallet 	= 1;
+		Phone 	= 2;
+		Card 	= 3;
+	}
+
+	enum Status {
+		Active 				= 0;
+		Blocked 			= 1;
+		WaitingActivation	= 2;
+		WaitingBinding 		= 3;
+	}
+
+	required int32 id = 1;
+	required Type type = 2;
+	required Status status = 3;
+	required string name = 4;
+
+	required string expire = 5;
+	required string cardNumber = 6;
+	required string ownerName = 7;
+	required int32 cardPaymentSystemId = 8;
+}
+
+message BillProto {
+	required string PayerID = 1;
+	required float AmountWithoutInsurance = 2;
+	required float AmountWithInsurance = 3;
+	required int32 Year = 4;
+	required int32 Month = 5;
+	required int32 Status = 6;
+	required bool InsuranceEnabled = 7;
+	optional string Message = 8;
+}
+
+message BillsListProto
+{
+	repeated BillProto bill = 1;
+}
+
+message GibddTransaction
+{
+	required uint64 transactionId = 1;
+	required float sum = 2;
+	required float fee = 3;
+	required string cardName = 4;
+	required string dNumber = 5;
+	required string addInfo = 6;
+	required int32 status = 7;
+	required uint64 result = 8;
+	required string resultMessage = 9;
+	required string date = 10;
+}
+
+message GibddBillProto
+{
+	required string id = 1;
+	required float amount = 2;
+	required float debtAmount = 3;
+	required string date = 4;
+	required string article = 5;
+	required string regDoc = 6;
+	required uint64 paidServiceId = 7;
+	required int32 status = 8;
+	required int32 regType = 9;
+	required float fee = 10;
+	required GibddTransaction transaction = 11;
+}
+
+message GibddBillsListProto
+{
+	repeated GibddBillProto bill = 1;
+}
+
+message OldPaymentDataProto
+{
+	required float sum = 1;
+	required uint64 templateid = 2;
+	required string dnumber = 3;
+	required string addinfo = 4;
+	optional TemplateProto template = 5;
+}
+
+message CardDetailsProto {
+	required string number = 1;
+	required int32 expyear = 2;
+	required int32 expmonth = 3;
+	optional string owner = 4;
+}
+
+message HistoryRecordProto {
+
+	enum Status {
+		Unprocessed = 0;
+		InProgress 	= 1;
+		Complete 	= 2;
+	}
+
+	required uint64 id = 1;
+	required string destination = 2;
+	required string addinfo = 3;
+	required Status status = 4;
+	required float amount = 5;
+	required float fee = 6;
+	optional uint64 result = 7;
+	optional string message = 8;
+	optional string date = 9;
+	required string cardName = 10;
+	required uint64 cardId = 11;
+	required uint64 merchantId = 12;
+	required string merchantName = 13;
+	optional string merchantCode = 14;
+	required uint64 categoryId = 15;
+	required string categoryName = 16;
+	optional string categoryCode = 17;
+	required int32 state = 18;
+}
+
+message GibddBillRecordProto
+{
+	required string id = 1;
+	required float amount = 2;
+	required float debtAmount = 3;
+	required string date = 4;
+	required string article = 5;
+	required string regDoc = 6;
+	required uint64 paidServiceId = 7;
+}
+
+message FavoritePayProto {
+  	required uint64 favoritePayId = 1;
+	required uint64 transactionId = 2;
+	required float sum = 3;
+	required string dNumber = 5;
+	required uint64 paidServiceId = 6;
+	required string title = 7;
+}
+
+message RegistrationRequestProto {
+    required int32 channel = 1;
+    required string phone = 2;
+    optional string password = 3;
+}
+
+message RegistrationResponseProto {
+    optional string sessionid = 1;
+    optional ErrorProto error = 2;
+    optional string password = 3;
+}
+
+message AccessRoleNameProto
+{
+	required uint64 id = 1;
+	required string title = 2;
+}
+
+message LoginRequestProto {
+	required int32 channel = 1;
+	required string login = 2;
+	required string password = 3;
+}
+
+message LoginResponseProto {
+	optional string sessionid = 1;
+    optional ErrorProto error = 2;
+	repeated AccessRoleNameProto accessRoleName = 3;
+}
+
+message ListPaymentToolsRequestProto {
+	required string sid = 1;
+}
+
+message ListPaymentToolsResponseProto {
+	repeated PaymentToolProto paytool = 1;
+	optional ErrorProto error = 2;
+}
+
+message CarrierRequestProto {
+	required string phone = 1;
+}
+
+message CarrierResponseProto {
+	optional int32 operatorid = 1;
+	optional string name = 2;
+	optional string logo = 3;
+	optional ErrorProto error = 4;
+}
+
+message AddCardRequestProto {
+	required string sid = 1;
+	required CardDetailsProto card = 2;
+}
+
+message AddCardResponseProto {
+	optional int32 cardid = 1;
+	optional PaymentToolProto paytool = 2;
+	optional ErrorProto error = 3;
+}
+
+message DeleteCardRequestProto
+{
+	required string sid = 1;
+	required int32 cardId = 2;
+}
+
+message DeleteCardResponseProto
+{
+	required uint64 transactionId = 1;
+	optional ErrorProto error = 2;
+}
+
+message BlockRandomSumRequestProto {
+	required string sid   		= 1;
+	required int32 cardid 		= 2;
+	required int32 securitycode = 3;
+}
+
+message BlockRandomSumResponseProto {
+	optional ErrorProto error = 1;
+}
+
+message VerifySumRequestProto {
+	required string sid   	= 1;
+	required int32 cardid 	= 2;
+	required int32 sum 		= 3;
+}
+
+message VerifySumResponseProto {
+	optional ErrorProto error = 1;
+}
+
+message PaymentRequestProto {
+	required string sid   				= 1;
+	required OldPaymentDataProto data 	= 2;
+	required int32 cardid 				= 3;
+	required string securitycode		= 4;
+	required string password			= 5;
+}
+
+message PayByInitialIdRequestProto {
+	required string sid   				= 1;
+	required uint64 initialId	 	= 2;
+	required float sum 				= 3;
+	required string securitycode		= 4;
+}
+
+message PaymentResponseProto {
+	optional uint64 id = 1;
+	optional ErrorProto error = 2;
+	optional Params3DsProto params3Ds 	= 3;
+}
+
+message Params3DsProto
+{
+	optional string acs		= 1;
+	optional string paReq	= 2;
+	optional string paRes	= 3;
+	optional string termUrl = 4;
+	optional string md		= 5;
+}
+
+message TransactionStateRequestProto
+{
+	required string sid					= 1;
+	required uint64 transactionId		= 2;
+}
+
+message TransactionStateResponseProto
+{
+	optional ErrorProto error = 1;
+	required int32 operationState = 2;
+	optional Params3DsProto params3Ds 	= 3;
+}
+
+message CellularPaymentRequestProto {
+	required string sid 				= 1;
+	required string phone 				= 2;
+	required float sum 					= 3;
+	required int32  cardid 				= 4;
+	required string securitycode		= 5;
+	required string password			= 6;
+
+}
+
+message RestorePasswordRequestProto {
+	required int32 channel = 1;
+	required string phone = 2;
+}
+
+message RestorePasswordResponseProto {
+	optional ErrorProto error = 1;
+}
+
+message HistoryRequestProto
+{
+	required string sid = 1;
+	optional int32 channel = 2;
+	optional int32 cardId = 3;
+}
+
+message HistoryResponseProto {
+	repeated HistoryRecordProto records = 1;
+	optional ErrorProto error = 2;
+}
+
+message GibddBillsRequestProto
+{
+	required int32 channel = 1;
+	required PaymentRequestProto data = 2;
+}
+
+message GibddBillsResponseProto
+{
+	repeated GibddBillRecordProto records = 1;
+	optional ErrorProto error = 2;
+}
+
+message SendMailRequestProto {
+	required string address 			= 1;
+	required string subject				= 2;
+	required string body				= 3;
+}
+
+message SendMailResponseProto {
+	optional ErrorProto error = 1;
+}
+
+message FeeRequestProto {
+	required float value = 1;
+    optional int32 merchantid = 2;
+}
+
+message FeeResponseProto {
+	required float feevalue = 1;
+	required string formula = 2;
+	optional ErrorProto error = 3;
+}
+
+message FeeByClientRequestProto
+{
+	required string sid = 1;
+	required OldPaymentDataProto data = 2;
+}
+
+message SimpleFeeResponseProto
+{
+	optional float fee = 1;
+	optional string formula = 2;
+	optional ErrorProto error = 3;
+}
+
+message CellularFeeRequestProto
+{
+	required string sid = 1;
+	required string number = 2;
+	required float sum = 3;
+}
+
+message MerchantsListProto
+{
+	repeated MerchantProto merchant = 1;
+}
+
+message CategoryProto
+{
+	required uint64 id = 1;
+	optional string code = 2;
+	required string name = 3;
+	optional string image = 4;
+	required uint64 rootId = 5;
+	optional MerchantsListProto merchantsList = 6;
+}
+
+message CategoryListRequestProto
+{
+	required int32 maxMerchants = 1;
+}
+
+message CategoryListResponseProto
+{
+	repeated CategoryProto category = 1;
+	optional ErrorProto error = 2;
+}
+
+message MerchantProto
+{
+	required uint64 id = 1;
+	optional string code = 2;
+	required string name = 3;
+	optional string image = 4;
+	required uint64 rootId = 5;
+}
+
+message MerchantListRequestProto
+{
+	required uint64 categoryId = 1;
+	optional int32 maxResult = 2;
+	required bool orderByName = 3;
+}
+
+message MerchantListResponseProto
+{
+	repeated MerchantProto merchant = 1;
+	optional ErrorProto error = 2;
+}
+
+message CellOperatorRequestProto
+{
+	required string phoneNumber = 1;
+}
+
+message CellOperatorResponseProto
+{
+	required int32 id = 1;
+	required string name = 2;
+	optional string image = 3;
+	optional ErrorProto error = 4;
+}
+
+message FavoriteListRequestProto
+{
+	required string sid = 1;
+}
+
+message FavoriteListResponseProto
+{
+	repeated FavoritePayProto payFavoriteList = 1;
+	optional ErrorProto error = 2;
+}
+
+message AddFavoritePayRequestProto
+{
+	required string sid = 1;
+	required uint64 transactionId = 2;
+	optional uint64 favoritePayId = 3;
+}
+
+message AddFavoritePayResponseProto
+{
+	required FavoritePayProto favoritePay = 1;
+	optional ErrorProto error = 2;
+}
+
+message DeleteFavoritePayRequestProto
+{
+	required string sid = 1;
+	optional uint64 favoritePayId = 2;
+}
+
+message DeleteFavoritePayResponseProto
+{
+	optional ErrorProto error = 1;
+}
+
+message CheckRequestProto
+{
+	required string sid = 1;
+	required uint64 transactionId = 2;
+}
+
+message CheckResponseProto
+{
+	required uint64 transactionId = 1;
+	required string operationDate = 2;
+	required string operationType = 3;
+	required float operationSum = 4;
+	required float operationFee = 5;
+	required int32 operationState = 6;
+	required string operationPayTool = 7;
+	required string operationResultMessage = 8;
+
+	required MerchantFullInformationProto merchantInfo = 9;
+
+	required ContactsProto contactsPaysystem = 10;
+	required ContactsProto contactsCompany = 11;
+	optional ErrorProto error = 12;
+}
+
+
+message GetMerchantRequestProto
+{
+	required uint64 merchantId = 1;
+}
+
+message GetMerchantResponseProto
+{
+	required MerchantFullInformationProto merchantInfo = 1;
+	optional ErrorProto error = 2;
+}
+
+message MerchantFullInformationProto
+{
+	required uint64 id = 1;
+	optional string code = 2;
+	required string name = 3;
+	optional string image = 4;
+	required uint64 rootId = 5;
+
+	optional MerchantProto category = 6;
+
+	optional string webUrl = 7;
+	optional float minSum = 8;
+	optional float maxSum = 9;
+	optional uint64 inputTemplateId = 10;
+	required TemplateProto template = 11;
+	repeated TemplateGroupProto additionalInfo = 12;
+}
+
+message ContactsProto
+{
+	required string title = 1;
+	required string address = 2;
+	required string inn = 3;
+	required string phone = 4;
+	required string fax = 5;
+	required string eMail = 6;
+	optional string contract = 7;
+}
+
+message TemplateProto
+{
+	required uint64 id = 1;
+	required string title = 2;
+	optional string description = 3;
+	repeated TemplateGroupProto groups = 4;
+}
+
+message TemplateGroupProto
+{
+	required string id = 1;
+	optional string title = 2;
+	repeated TemplateInputProto inputs = 3;
+}
+message InputProto
+{
+	enum Type{
+	      UNDEFINED_TYPE = 0;
+	      NUMERIC_TYPE = 1;
+	      TEXT_TYPE = 2;
+	      PHONE_TYPE = 3;
+	      PERIOD_TYPE = 4;
+	      IPv4_ADDRESS = 5;
+	}
+
+	required string id = 1;
+	required Type type = 2 [default = UNDEFINED_TYPE];
+	required string value = 3;
+}
+message TemplateInputProto
+{
+	message OptionProto {
+		required string value = 1;
+		required string title = 2;
+	}
+
+	message RuleProto{
+		enum Type{
+			NUMERIC_TYPE_RULE_ID = 1;
+			TEXT_TYPE_RULE_ID = 2;
+			PHONE_TYPE_RULE_ID = 3;
+			IP4_TYPE_RULE_ID = 4;
+		}
+
+		required Type id = 1 [default = TEXT_TYPE_RULE_ID];
+		required string message = 2;
+		required string validateStr = 3;
+	}
+
+	required string id = 1;
+	//required InputProto.Type type = 2 [default = UNDEFINED_TYPE];
+	required string value = 3;
+	optional string title = 4;
+	repeated OptionProto options = 5;
+	optional string example = 6;
+	optional bool required = 7;
+	optional string hint = 8;
+	repeated RuleProto rules = 9;
+}
+
+message GroupInputProto
+{
+	required string id = 1;
+	optional string title = 2;
+	repeated InputProto inputs = 3;
+}
+
+
+
+
+message RenameFavoritePayRequestProto {
+	required string sid   		= 1;
+	required int32 favoritePayIid 		= 2;
+	required string newTitle = 3;
+}
+
+message RenameFavoritePayResponseProto {
+	optional ErrorProto error = 1;
+}
