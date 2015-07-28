@@ -1,0 +1,12 @@
+protobuf.lo: /usr/share/nginx/html/php-protobuf-master/protobuf.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/usr/share/nginx/html/php-protobuf-master $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /usr/share/nginx/html/php-protobuf-master/protobuf.c -o protobuf.lo 
+reader.lo: /usr/share/nginx/html/php-protobuf-master/reader.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/usr/share/nginx/html/php-protobuf-master $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /usr/share/nginx/html/php-protobuf-master/reader.c -o reader.lo 
+writer.lo: /usr/share/nginx/html/php-protobuf-master/writer.c
+	$(LIBTOOL) --mode=compile $(CC)  -I. -I/usr/share/nginx/html/php-protobuf-master $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /usr/share/nginx/html/php-protobuf-master/writer.c -o writer.lo 
+$(phplibdir)/protobuf.la: ./protobuf.la
+	$(LIBTOOL) --mode=install cp ./protobuf.la $(phplibdir)
+
+./protobuf.la: $(shared_objects_protobuf) $(PROTOBUF_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_protobuf) $(PROTOBUF_SHARED_LIBADD)
+

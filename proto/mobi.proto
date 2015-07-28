@@ -1,0 +1,63 @@
+package mobiplas;
+
+message MobiplasPacketProto{
+    enum RequestId {
+        // Auth and admin functions
+        Registration = 0;
+		Login         = 1;
+        Pinset        = 2;
+        Pinchange   = 3;
+        // Info functions
+        Accounts     = 11;
+        Cards         = 12;
+        History       = 13;
+        Products      = 14;
+        // Finnancial functions
+        Transfer      = 21;
+        Payment     = 22;
+	}
+    required int32 id = 1;
+	optional bytes data = 2;
+}
+message Fault {
+	required int32 internalCode = 1;
+	required int32 externalCode = 2;
+	optional string externalMessage = 3;
+}
+message Response{
+    required int32 code = 1;
+    required string request = 2;
+    required int32 needConfirm = 3;
+    optional string message = 4;
+    optional string todo = 5;
+}
+message RegistrationRequest{
+    required string firstName = 1;
+    required string middleName = 2;
+    required string lastName = 3;
+    required string phone = 4;
+    required string email = 5;
+    optional int32 channel = 6;
+}
+message PinsetRequest{
+    required string phone = 1;
+}
+message PinsetConfirmRequest{
+    required string phone = 1;
+    required string newpin = 2;
+    required string dynpass = 3;
+}
+message LoginRequest{
+    required string phone = 1;
+    required string pin = 2;
+}
+message PinchangeRequest{
+    required string phone = 1;
+    required string pin = 2;
+}
+message PinChangeConfirmRequest{
+    required string phone = 1;
+    required string pin = 2;
+    required string dynpass = 3;
+    required string newpin = 4;
+}
