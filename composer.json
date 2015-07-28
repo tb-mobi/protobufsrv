@@ -1,0 +1,22 @@
+{
+  "repositories":[
+    {
+      "type":"package",
+      "package":{
+        "name":"mobi.protobuf.proxy",
+        "version":"1.0",
+        "source":{
+          "type":"git",
+          "url":"https://github.com/tb-mobi/protobufsrv",
+          "reference":"master"
+        },
+        "autoload":{
+          "classmap": ["src/"]
+        }
+      }
+    }
+  ],
+  "require": {
+        "apache/log4php": "2.3.0"
+    }
+}
